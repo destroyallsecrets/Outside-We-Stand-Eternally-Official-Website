@@ -12,9 +12,10 @@ interface GithubEmbedProps {
     forks: number;
     issues: number;
   };
+  variant?: 'glass' | 'terminal';
 }
 
-export const GithubEmbed: React.FC<GithubEmbedProps> = ({ url, className = '', stats }) => {
+export const GithubEmbed: React.FC<GithubEmbedProps> = ({ url, className = '', stats, variant = 'glass' }) => {
   const [readme, setReadme] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -54,11 +55,19 @@ export const GithubEmbed: React.FC<GithubEmbedProps> = ({ url, className = '', s
 
   if (!url) return null;
 
+  const containerStyles = variant === 'terminal'
+    ? "border border-emerald-900/30 bg-black/80 rounded-lg font-mono"
+    : "border border-white/10 liquid-glass rounded-xl";
+
+  const headerStyles = variant === 'terminal'
+    ? "bg-emerald-950/20 border-b border-emerald-900/30 text-emerald-500"
+    : "bg-white/[0.02] border-b border-white/5 text-slate-500";
+
   return (
-    <div className={`relative w-full h-full min-h-[500px] border border-white/10 liquid-glass rounded-xl overflow-hidden group flex flex-col ${className}`}>
-      
+    <div className={`relative w-full h-full min-h-[500px] overflow-hidden group flex flex-col ${containerStyles} ${className}`}>
+
       {/* Dynamic Stats Header (Minimal) */}
-      <div className="px-6 py-3 bg-white/[0.02] border-b border-white/5 flex justify-between items-center">
+      <div className={`px-6 py-3 flex justify-between items-center ${headerStyles}`}>
         <div className="flex gap-6">
           {stats && (
             <>
@@ -88,8 +97,8 @@ export const GithubEmbed: React.FC<GithubEmbedProps> = ({ url, className = '', s
           </div>
         ) : error ? (
           <div className="h-full flex flex-col items-center justify-center text-center space-y-4 p-12">
-            <Terminal size={48} className="text-red-500/20" />
-            <h4 className="text-white font-bold uppercase tracking-widest">Mirror_Handshake_Failed</h4>
+            <Terminal size={48} className={variant === 'terminal' ? "text-emerald-500/20" : "text-red-500/20"} />
+            <h4 className={`font-bold uppercase tracking-widest ${variant === 'terminal' ? 'text-emerald-500' : 'text-white'}`}>Mirror_Handshake_Failed</h4>
             <p className="text-slate-500 text-xs font-mono max-w-xs">
               Direct registry framing restricted. Initialize manual source exploration via the Source_Explorer protocol.
             </p>
@@ -102,17 +111,17 @@ export const GithubEmbed: React.FC<GithubEmbedProps> = ({ url, className = '', s
             <ReactMarkdown
               remarkPlugins={[remarkGfm]}
               components={{
-                h1: ({node, ...props}) => <h1 className="text-3xl font-bold text-white mb-8 border-b border-white/10 pb-4 uppercase tracking-tighter" {...props} />,
-                h2: ({node, ...props}) => <h2 className="text-xl font-bold text-accent mt-12 mb-4 uppercase tracking-tight flex items-center gap-2" {...props} />,
-                h3: ({node, ...props}) => <h3 className="text-lg font-bold text-white mt-8 mb-4" {...props} />,
-                p: ({node, ...props}) => <p className="text-slate-400 leading-relaxed mb-6 font-light" {...props} />,
-                code: ({node, inline, ...props}: any) =>
+                h1: ({ node, ...props }) => <h1 className="text-3xl font-bold text-white mb-8 border-b border-white/10 pb-4 uppercase tracking-tighter" {...props} />,
+                h2: ({ node, ...props }) => <h2 className="text-xl font-bold text-accent mt-12 mb-4 uppercase tracking-tight flex items-center gap-2" {...props} />,
+                h3: ({ node, ...props }) => <h3 className="text-lg font-bold text-white mt-8 mb-4" {...props} />,
+                p: ({ node, ...props }) => <p className="text-slate-400 leading-relaxed mb-6 font-light" {...props} />,
+                code: ({ node, inline, ...props }: any) =>
                   inline ?
-                  <code className="bg-white/10 px-1.5 py-0.5 rounded text-accent font-mono text-xs" {...props} /> :
-                  <div className="bg-black/60 p-6 rounded-lg border border-white/5 my-8 font-mono text-xs text-slate-300 overflow-x-auto" {...props} />,
-                ul: ({node, ...props}) => <ul className="list-disc list-inside space-y-3 mb-8 text-slate-400 font-light" {...props} />,
-                li: ({node, ...props}) => <li className="marker:text-accent" {...props} />,  
-                blockquote: ({node, ...props}) => <blockquote className="border-l-2 border-accent/30 pl-6 italic text-slate-500 my-8" {...props} />
+                    <code className="bg-white/10 px-1.5 py-0.5 rounded text-accent font-mono text-xs" {...props} /> :
+                    <div className="bg-black/60 p-6 rounded-lg border border-white/5 my-8 font-mono text-xs text-slate-300 overflow-x-auto" {...props} />,
+                ul: ({ node, ...props }) => <ul className="list-disc list-inside space-y-3 mb-8 text-slate-400 font-light" {...props} />,
+                li: ({ node, ...props }) => <li className="marker:text-accent" {...props} />,
+                blockquote: ({ node, ...props }) => <blockquote className="border-l-2 border-accent/30 pl-6 italic text-slate-500 my-8" {...props} />
               }}
             >
               {readme}

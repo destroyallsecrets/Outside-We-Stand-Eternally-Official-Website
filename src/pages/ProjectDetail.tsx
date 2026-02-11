@@ -9,11 +9,12 @@ import { ClassicLayout } from '../components/layouts/ClassicLayout';
 import { ImmersiveLayout } from '../components/layouts/ImmersiveLayout';
 import { TechnicalLayout } from '../components/layouts/TechnicalLayout';
 import { ModernLayout } from '../components/layouts/ModernLayout';
+import { AgenticLayout } from '../components/layouts/AgenticLayout';
 
 const ProjectDetail: React.FC = () => {
   const { projectId } = useParams<{ projectId: string }>();
   const location = useLocation();
-  
+
   const project = React.useMemo(() => {
     if (location.state?.project) return location.state.project;
     return staticProjects.find(p => p.id === projectId);
@@ -47,6 +48,8 @@ const ProjectDetail: React.FC = () => {
         return <TechnicalLayout project={project} />;
       case 'modern':
         return <ModernLayout project={project} />;
+      case 'agentic':
+        return <AgenticLayout project={project} />;
       default:
         return <ClassicLayout project={project} />;
     }

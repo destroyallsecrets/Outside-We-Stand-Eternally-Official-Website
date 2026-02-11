@@ -1,4 +1,5 @@
 import React, { useRef, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { SwissGrid } from '../components/SwissGrid';
 import { ProjectList } from '../components/ProjectList';
 import { ArrowDown } from 'lucide-react';
@@ -50,20 +51,20 @@ const Home: React.FC = () => {
 
         {/* Archive Callout */}
         <section className="py-24 px-6 text-center border-t border-white/5">
-           <p className="text-xs uppercase tracking-[0.5em] text-slate-600 mb-8 font-bold">Historical Records</p>
-           <a href="/archive" className="text-2xl font-light hover:text-accent transition-colors group">
-             Explore the Archive <span className="inline-block translate-x-0 group-hover:translate-x-2 transition-transform">â†’</span>
-           </a>
+          <p className="text-xs uppercase tracking-[0.5em] text-slate-600 mb-8 font-bold">Historical Records</p>
+          <a href="/archive" className="text-2xl font-light hover:text-accent transition-colors group">
+            Explore the Archive <span className="inline-block translate-x-0 group-hover:translate-x-2 transition-transform">â†’</span>
+          </a>
         </section>
 
         {/* Footer */}
         <footer className="relative py-24 px-6 border-t border-white/5 bg-slate-950/80 backdrop-blur-md">
           <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-end">
             <div>
-              <h2 className="text-8xl font-bold tracking-tighter text-white/10 mb-8">        
+              <h2 className="text-8xl font-bold tracking-tighter text-white/10 mb-8">
                 FUTURE
               </h2>
-              <div className="flex gap-8 text-xs uppercase tracking-widest text-slate-500">  
+              <div className="flex gap-8 text-xs uppercase tracking-widest text-slate-500">
 
                 <a href={siteConfig.links.twitter} target="_blank" rel="noreferrer" className="hover:text-accent transition-colors">Twitter</a>
                 <a href={siteConfig.links.linkedin} target="_blank" rel="noreferrer" className="hover:text-accent transition-colors">LinkedIn</a>
@@ -71,10 +72,10 @@ const Home: React.FC = () => {
               </div>
             </div>
             <div className="mt-12 md:mt-0 text-right">
-               <p className="text-sm text-slate-600 font-mono">
-                 Â© {new Date().getFullYear()} {siteConfig.name.toUpperCase()}<br/>
-                 ZURICH / TOKYO / METAVERSE
-               </p>
+              <p className="text-sm text-slate-600 font-mono">
+                Â© {new Date().getFullYear()} {siteConfig.name.toUpperCase()}<br />
+                ZURICH / TOKYO / METAVERSE
+              </p>
             </div>
           </div>
         </footer>

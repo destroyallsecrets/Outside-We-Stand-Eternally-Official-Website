@@ -2,6 +2,31 @@ import { Project } from '../types';
 
 export const projects: Project[] = [
   {
+    id: '00',
+    title: 'Agentic Pro',
+    category: 'INTELLIGENCE',
+    description: 'Autonomous AI orchestration for complex persistent workflows.',
+    fullDescription: 'Agentic Pro is a next-generation orchestrator for autonomous AI agents. Built on the Gemini 2.0 Flash thinking model, it features a persistent hot-swappable state engine, a visual node graph for agent relationships, and a "Swarm Teleporter" bridge that connects local CLI environments to the cloud. It serves as the central nervous system for the Outside We Stand Eternally agentic grid.',
+    year: '2026',
+    color: '#10b981',
+    role: 'Lead Architect',
+    techStack: ['Next.js', 'Gemini 2.0', 'React Flow', 'TypeScript'],
+    extendedTechStack: [
+      { name: 'Next.js App Router', description: 'Server Actions for seamless state persistence across hot-reloads.' },
+      { name: 'Gemini 2.0 Flash', description: 'Multimodal reasoning engine driving autonomous decision making.' },
+      { name: 'React Flow', description: 'Interactive node-graph visualization of agent relationships.' },
+      { name: 'WebSockets', description: 'Real-time telemetry streaming for the Swarm Teleporter bridge.' },
+      { name: 'TypeScript', description: 'Strict type safety ensuring robust architecture at scale.' }
+    ],
+    challenges: 'Designing a persistence layer that survives hot-reloads while maintaining complex agent state and visualizing real-time swarm telemetry.',
+    solution: 'Implemented a custom `usePersistence` hook with localStorage sync and a dedicated Artifact Bridge API for filesystem streaming.',
+    layoutType: 'agentic',
+    shapeType: 'icosahedron',
+    githubUrl: 'https://github.com/destroyallsecrets/agentic-pro',
+    link: 'https://agentic-pro.vercel.app/',
+    stats: { stars: 12, forks: 2, issues: 0 }
+  },
+  {
     id: '01',
     title: 'Agentic Swarm V2',
     category: 'INTELLIGENCE',
@@ -56,7 +81,7 @@ export const projects: Project[] = [
     id: '04',
     title: 'Solar Scope',
     category: 'IMMERSIVE',
-    description: 'Real-time astronomical data visualization engine for solar monitoring.',   
+    description: 'Real-time astronomical data visualization engine for solar monitoring.',
     fullDescription: 'Solar Scope transforms raw telemetry from astronomical observatories into a high-fidelity interactive 3D environment. Users can observe solar flares, sunspots, and geomagnetic activity in real-time through a GPU-accelerated interface. Utilizing custom GLSL shaders for volumetric solar rendering and optimized data-stream decoders, the platform visualizes massive datasets with cinematic precision, anchoring the user within the live data stream of our nearest star.',
     year: '2025',
     color: '#fbbf24',
@@ -73,7 +98,7 @@ export const projects: Project[] = [
     id: '05',
     title: 'Interstream',
     category: 'INFRASTRUCTURE',
-    description: 'Distributed content delivery protocol for decentralized web services.',    
+    description: 'Distributed content delivery protocol for decentralized web services.',
     fullDescription: 'Interstream is an experimental content delivery protocol built on top of P2P primitives. It enables highly resilient content distribution that bypasses centralized gatekeepers while maintaining high performance. By implementing a gossip-based state propagation algorithm with adaptive buffering, Interstream ensures low-latency stream synchronization across non-persistent peer nodes, creating a truly decentralized infrastructure for the future of digital content.',
     year: '2024',
     color: '#60a5fa',
