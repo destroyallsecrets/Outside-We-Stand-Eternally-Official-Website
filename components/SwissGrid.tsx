@@ -38,9 +38,10 @@ export const SwissGrid: React.FC = () => {
            <div className="max-w-md">
              <div className="w-12 h-1 bg-red-500 mb-6" />
              <p className="text-lg md:text-xl font-light leading-relaxed text-slate-300">
-               We are the static in the signal. The ghost in the machine. 
-               We build monuments to the forgotten and encrypt the silence 
-               between the stars.
+               OUTSIDE WE STAND ETERNALLY LLC<br/>
+               Zurich, Switzerland<br/>
+               contact@outsidewestandeternally.com<br/>
+               github.com/destroyallsecrets
              </p>
            </div>
         </div>

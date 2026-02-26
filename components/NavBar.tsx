@@ -28,6 +28,14 @@ export const NavBar: React.FC = () => {
         >
           TENETS
         </NavLink>
+        <NavLink 
+          to="/archive" 
+          className={({ isActive }) => 
+            `hover:underline decoration-red-500 underline-offset-4 ${isActive ? 'text-red-500 underline' : ''}`
+          }
+        >
+          ARCHIVE
+        </NavLink>
       </div>
       
       {/* Mobile Menu Icon Placeholder (Conceptual) */}
