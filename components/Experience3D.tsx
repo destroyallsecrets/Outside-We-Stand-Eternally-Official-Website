@@ -1,44 +1,100 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState, useEffect, useMemo } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Text, Float, Stars, Trail, MeshTransmissionMaterial, Environment, Sparkles as DreiSparkles } from '@react-three/drei';
 import * as THREE from 'three';
 import { PROJECTS } from '../constants';
 
-const MonadicSphere: React.FC<{ scrollOffset: number }> = ({ scrollOffset }) => {
-  const meshRef = useRef<THREE.Mesh>(null);
-  
+const SHAPES = ['sphere', 'knot', 'cube', 'triangle'] as const;
+type ShapeType = typeof SHAPES[number];
+
+const MorphingShape: React.FC<{ scrollOffset: number }> = ({ scrollOffset }) => {
+  const meshRefs = useRef<(THREE.Mesh | null)[]>([]);
+  const [currentShapeIndex, setCurrentShapeIndex] = useState(0);
+  const [targetShapeIndex, setTargetShapeIndex] = useState(0);
+  const transitionProgress = useRef(0);
+  const shapeChangeTimer = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    const changeShape = () => {
+      setTargetShapeIndex((prev) => (prev + 1) % SHAPES.length);
+      transitionProgress.current = 0;
+    };
+
+    shapeChangeTimer.current = setInterval(changeShape, 4000);
+    return () => {
+      if (shapeChangeTimer.current) clearInterval(shapeChangeTimer.current);
+    };
+  }, []);
+
   useFrame((state) => {
-    if (meshRef.current) {
-      // Slow rotation for the core
-      meshRef.current.rotation.y = state.clock.getElapsedTime() * 0.1;
-      meshRef.current.rotation.z = state.clock.getElapsedTime() * 0.05;
+    const t = state.clock.getElapsedTime();
+    
+    transitionProgress.current = Math.min(transitionProgress.current + 0.008, 1);
+    const progress = THREE.MathUtils.smoothstep(transitionProgress.current, 0, 1);
+    
+    const prevScale = Math.sin(progress * Math.PI) * 0.3;
+    const currScale = 1 - Math.sin(progress * Math.PI) * 0.3;
+
+    meshRefs.current.forEach((mesh, idx) => {
+      if (!mesh) return;
       
-      // Breathing scale effect
-      const breathe = 1 + Math.sin(state.clock.getElapsedTime() * 0.5) * 0.05;
-      meshRef.current.scale.set(breathe, breathe, breathe);
+      const isPrev = idx === currentShapeIndex;
+      const isCurr = idx === targetShapeIndex;
+      
+      if (isPrev || isCurr) {
+        const scale = isPrev ? (1 - progress) : progress;
+        mesh.scale.setScalar(scale * (1 + Math.sin(t * 2) * 0.05));
+        mesh.visible = scale > 0.01;
+      } else {
+        mesh.visible = false;
+        mesh.scale.setScalar(0);
+      }
+    });
+
+    if (transitionProgress.current >= 1) {
+      setCurrentShapeIndex(targetShapeIndex);
+    }
+
+    if (meshRefs.current[currentShapeIndex]) {
+      meshRefs.current[currentShapeIndex].rotation.y = t * 0.15;
+      meshRefs.current[currentShapeIndex].rotation.z = t * 0.08;
     }
   });
 
+  const geometries = useMemo(() => [
+    new THREE.SphereGeometry(1.8, 64, 64),
+    new THREE.TorusKnotGeometry(1.2, 0.4, 128, 32),
+    new THREE.BoxGeometry(2.8, 2.8, 2.8, 32, 32, 32),
+    new THREE.IcosahedronGeometry(2, 1),
+  ], []);
+
   return (
-    <mesh ref={meshRef} position={[0, 0, 0]}>
-      {/* High resolution sphere for glass core */}
-      <sphereGeometry args={[1.8, 64, 64]} />
-      <MeshTransmissionMaterial
-        backside
-        backsideThickness={1}
-        thickness={3}
-        roughness={0.1}
-        transmission={1}
-        chromaticAberration={0.5} // High aberration for that "future glass" look
-        anisotropy={0.5}
-        distortion={0.4}
-        distortionScale={0.5}
-        temporalDistortion={0.2}
-        color="#a5f3fc" // cyan-200 base
-        bg="#020617" // match background
-        toneMapped={true}
-      />
-    </mesh>
+    <group>
+      {SHAPES.map((shape, idx) => (
+        <mesh
+          key={shape}
+          ref={(el) => { meshRefs.current[idx] = el; }}
+          geometry={geometries[idx]}
+          visible={idx === 0}
+        >
+          <MeshTransmissionMaterial
+            backside
+            backsideThickness={1}
+            thickness={3}
+            roughness={0.1}
+            transmission={1}
+            chromaticAberration={0.5}
+            anisotropy={0.5}
+            distortion={0.4}
+            distortionScale={0.5}
+            temporalDistortion={0.2}
+            color="#a5f3fc"
+            bg="#020617"
+            toneMapped={true}
+          />
+        </mesh>
+      ))}
+    </group>
   );
 };
 
@@ -143,7 +199,7 @@ const SceneContent: React.FC<{ scrollOffset: number }> = ({ scrollOffset }) => {
       <Stars radius={150} depth={50} count={7000} factor={4} saturation={0} fade speed={1} />
       <DreiSparkles count={100} scale={10} size={2} speed={0.4} opacity={0.5} color="#22d3ee" />
       
-      <MonadicSphere scrollOffset={scrollOffset} />
+      <MorphingShape scrollOffset={scrollOffset} />
 
       {PROJECTS.map((project, idx) => (
         <OrbitingProject 

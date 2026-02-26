@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { GithubRepo } from '../types';
 import { fetchUndeployedRepos } from '../services/github';
 
-const Archive: React.FC = () => {
+export const Archive: React.FC = () => {
   const [repos, setRepos] = useState<GithubRepo[]>([]);
   const [loading, setLoading] = useState(true);
 
