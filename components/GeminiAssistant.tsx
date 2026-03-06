@@ -42,7 +42,7 @@ export const GeminiAssistant: React.FC = () => {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="group relative flex items-center justify-center w-16 h-16 bg-white/5 backdrop-blur-md border border-white/10 rounded-full hover:bg-cyan-500/20 transition-all duration-500 shadow-[0_0_30px_rgba(0,0,0,0.5)]"
+          className="group relative flex items-center justify-center w-16 h-16 bg-white/10 backdrop-blur-2xl border border-white/20 rounded-full hover:bg-cyan-500/30 transition-all duration-500 shadow-[0_0_40px_rgba(0,0,0,0.6)]"
         >
           <div className="absolute inset-0 rounded-full border border-cyan-500/30 animate-ping opacity-20"></div>
           <Sparkles className="w-6 h-6 text-cyan-300 group-hover:text-white transition-colors" />
@@ -50,7 +50,7 @@ export const GeminiAssistant: React.FC = () => {
       )}
 
       {isOpen && (
-        <div className="w-80 sm:w-96 bg-slate-950/80 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden shadow-2xl flex flex-col h-[500px] transition-all duration-300">
+        <div className="w-80 sm:w-96 bg-slate-950/70 backdrop-blur-2xl border border-white/20 rounded-2xl overflow-hidden shadow-[0_0_60px_rgba(0,0,0,0.8)] flex flex-col h-[500px] transition-all duration-300">
           {/* Header */}
           <div className="p-4 border-b border-white/5 flex justify-between items-center bg-slate-900/50">
             <div className="flex items-center gap-2">

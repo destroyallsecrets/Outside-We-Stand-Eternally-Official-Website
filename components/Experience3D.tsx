@@ -8,92 +8,38 @@ const SHAPES = ['sphere', 'knot', 'cube', 'triangle'] as const;
 type ShapeType = typeof SHAPES[number];
 
 const MorphingShape: React.FC<{ scrollOffset: number }> = ({ scrollOffset }) => {
-  const meshRefs = useRef<(THREE.Mesh | null)[]>([]);
-  const [currentShapeIndex, setCurrentShapeIndex] = useState(0);
-  const [targetShapeIndex, setTargetShapeIndex] = useState(0);
-  const transitionProgress = useRef(0);
-  const shapeChangeTimer = useRef<NodeJS.Timeout | null>(null);
+  const groupRef = useRef<THREE.Group>(null);
+  const linesRef = useRef<THREE.LineSegments>(null);
 
-  useEffect(() => {
-    const changeShape = () => {
-      setTargetShapeIndex((prev) => (prev + 1) % SHAPES.length);
-      transitionProgress.current = 0;
-    };
-
-    shapeChangeTimer.current = setInterval(changeShape, 4000);
-    return () => {
-      if (shapeChangeTimer.current) clearInterval(shapeChangeTimer.current);
-    };
+  const lineGeometry = useMemo(() => {
+    const geo = new THREE.WireframeGeometry(new THREE.IcosahedronGeometry(2, 2));
+    return geo;
   }, []);
 
   useFrame((state) => {
     const t = state.clock.getElapsedTime();
     
-    transitionProgress.current = Math.min(transitionProgress.current + 0.008, 1);
-    const progress = THREE.MathUtils.smoothstep(transitionProgress.current, 0, 1);
-    
-    const prevScale = Math.sin(progress * Math.PI) * 0.3;
-    const currScale = 1 - Math.sin(progress * Math.PI) * 0.3;
-
-    meshRefs.current.forEach((mesh, idx) => {
-      if (!mesh) return;
-      
-      const isPrev = idx === currentShapeIndex;
-      const isCurr = idx === targetShapeIndex;
-      
-      if (isPrev || isCurr) {
-        const scale = isPrev ? (1 - progress) : progress;
-        mesh.scale.setScalar(scale * (1 + Math.sin(t * 2) * 0.05));
-        mesh.visible = scale > 0.01;
-      } else {
-        mesh.visible = false;
-        mesh.scale.setScalar(0);
-      }
-    });
-
-    if (transitionProgress.current >= 1) {
-      setCurrentShapeIndex(targetShapeIndex);
+    if (groupRef.current) {
+      groupRef.current.rotation.y = t * 0.15;
+      groupRef.current.rotation.x = Math.sin(t * 0.3) * 0.2;
+      groupRef.current.rotation.z = Math.cos(t * 0.2) * 0.1;
+      groupRef.current.position.y = Math.sin(t * 0.4) * 0.3;
+      groupRef.current.position.x = Math.cos(t * 0.25) * 0.2;
     }
-
-    if (meshRefs.current[currentShapeIndex]) {
-      meshRefs.current[currentShapeIndex].rotation.y = t * 0.15;
-      meshRefs.current[currentShapeIndex].rotation.z = t * 0.08;
+    
+    if (linesRef.current) {
+      const geo = linesRef.current.geometry as THREE.BufferGeometry;
+      const count = geo.attributes.position.count;
+      const progress = (t * 30) % count;
+      geo.setDrawRange(0, progress);
     }
   });
 
-  const geometries = useMemo(() => [
-    new THREE.SphereGeometry(1.8, 64, 64),
-    new THREE.TorusKnotGeometry(1.2, 0.4, 128, 32),
-    new THREE.BoxGeometry(2.8, 2.8, 2.8, 32, 32, 32),
-    new THREE.IcosahedronGeometry(2, 1),
-  ], []);
-
   return (
-    <group>
-      {SHAPES.map((shape, idx) => (
-        <mesh
-          key={shape}
-          ref={(el) => { meshRefs.current[idx] = el; }}
-          geometry={geometries[idx]}
-          visible={idx === 0}
-        >
-          <MeshTransmissionMaterial
-            backside
-            backsideThickness={1}
-            thickness={3}
-            roughness={0.1}
-            transmission={1}
-            chromaticAberration={0.5}
-            anisotropy={0.5}
-            distortion={0.4}
-            distortionScale={0.5}
-            temporalDistortion={0.2}
-            color="#a5f3fc"
-            bg="#020617"
-            toneMapped={true}
-          />
-        </mesh>
-      ))}
+    <group ref={groupRef}>
+      <lineSegments ref={linesRef} geometry={lineGeometry}>
+        <lineBasicMaterial color="#22d3ee" />
+      </lineSegments>
     </group>
   );
 };
@@ -130,9 +76,9 @@ const OrbitingProject: React.FC<{
   return (
     <group ref={groupRef}>
       <Trail
-        width={2} 
-        length={8} 
-        color={new THREE.Color(project.color).multiplyScalar(2)} // Boost brightness
+        width={1.5} 
+        length={4} 
+        color={new THREE.Color(project.color).multiplyScalar(2)}
         attenuation={(t) => t * t}
       >
         <mesh>
@@ -196,8 +142,8 @@ const SceneContent: React.FC<{ scrollOffset: number }> = ({ scrollOffset }) => {
         castShadow 
       />
       
-      <Stars radius={150} depth={50} count={7000} factor={4} saturation={0} fade speed={1} />
-      <DreiSparkles count={100} scale={10} size={2} speed={0.4} opacity={0.5} color="#22d3ee" />
+      <Stars radius={100} depth={30} count={3000} factor={3} saturation={0} fade speed={0.5} />
+      <DreiSparkles count={50} scale={8} size={1.5} speed={0.3} opacity={0.4} color="#22d3ee" />
       
       <MorphingShape scrollOffset={scrollOffset} />
 
@@ -218,10 +164,11 @@ export const Experience3D: React.FC<{ scrollProgress: number }> = ({ scrollProgr
   return (
     <div className="fixed inset-0 z-0 bg-slate-950 pointer-events-none">
       <Canvas 
-        dpr={[1, 2]} 
+        dpr={[1, 1.5]} 
         camera={{ position: [0, 0, 10], fov: 45 }}
         gl={{ 
           antialias: true, 
+          powerPreference: "high-performance",
           toneMapping: THREE.ACESFilmicToneMapping,
           toneMappingExposure: 1.2,
           alpha: true

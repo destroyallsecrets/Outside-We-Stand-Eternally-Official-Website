@@ -38,7 +38,7 @@ export const Home: React.FC = () => {
       <ProjectList />
 
       {/* Footer */}
-      <footer className="relative py-24 px-6 border-t border-white/5 bg-slate-950/80 backdrop-blur-md">
+      <footer className="relative py-24 px-6 border-t border-white/10 bg-slate-950/60 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-end">
           <div>
             <h2 className="text-8xl font-bold tracking-tighter text-white/10 mb-8">

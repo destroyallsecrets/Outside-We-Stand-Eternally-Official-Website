@@ -73,7 +73,7 @@ export const ProjectList: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
-              className="border border-white/10 bg-slate-900/30 p-6 hover:bg-slate-900/50 transition-colors group"
+              className="border border-white/20 bg-slate-900/50 p-6 hover:bg-slate-900/70 transition-colors group backdrop-blur-xl rounded-xl"
             >
               <div className="flex items-start justify-between mb-4">
                 <a 
@@ -130,7 +130,7 @@ export const ProjectList: React.FC = () => {
                  </div>
               </div>
 
-              <div className="w-full md:w-3/4 group relative p-8 md:p-12 border border-white/5 bg-slate-900/20 backdrop-blur-sm hover:bg-slate-900/40 transition-colors duration-500">
+              <div className="w-full md:w-3/4 group relative p-8 md:p-12 border border-white/10 bg-slate-900/40 backdrop-blur-xl hover:bg-slate-900/60 transition-colors duration-500 rounded-2xl">
                 <div 
                   className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-red-500 to-transparent scale-x-0 group-hover:scale-x-100 transition-transform duration-700 ease-out"
                 />

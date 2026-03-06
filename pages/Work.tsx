@@ -63,7 +63,7 @@ export const Work: React.FC = () => {
 
       {/* Right Column: The Preview (Sticky) */}
       <div className="hidden md:block w-full md:w-1/2 relative">
-        <div className="sticky top-32 h-[600px] border border-white/10 bg-slate-900/30 backdrop-blur-sm p-8 flex flex-col justify-between overflow-hidden">
+        <div className="sticky top-32 h-[600px] border border-white/20 bg-slate-900/50 backdrop-blur-xl p-8 flex flex-col justify-between overflow-hidden rounded-2xl">
           
           {/* Background decoration */}
           <div 

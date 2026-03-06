@@ -52,7 +52,7 @@ export const Archive: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
-              className="border border-white/10 bg-slate-900/30 p-6 hover:bg-slate-900/50 transition-colors group"
+              className="border border-white/20 bg-slate-900/50 p-6 hover:bg-slate-900/70 transition-colors group backdrop-blur-xl rounded-xl"
             >
               <div className="flex items-start justify-between mb-4">
                 <a 
