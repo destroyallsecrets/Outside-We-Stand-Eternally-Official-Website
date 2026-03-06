@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect, useMemo } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { Text, Float, Stars, Trail, MeshTransmissionMaterial, Environment, Sparkles as DreiSparkles } from '@react-three/drei';
+import { Text, Float, Trail, Environment } from '@react-three/drei';
 import * as THREE from 'three';
 import { PROJECTS } from '../constants';
 
@@ -77,21 +77,7 @@ const MorphingShape: React.FC<{ scrollOffset: number }> = ({ scrollOffset }) => 
           geometry={geometries[idx]}
           visible={idx === 0}
         >
-          <MeshTransmissionMaterial
-            backside
-            backsideThickness={1}
-            thickness={3}
-            roughness={0.1}
-            transmission={1}
-            chromaticAberration={0.5}
-            anisotropy={0.5}
-            distortion={0.4}
-            distortionScale={0.5}
-            temporalDistortion={0.2}
-            color="#a5f3fc"
-            bg="#020617"
-            toneMapped={true}
-          />
+          <meshBasicMaterial color="#22d3ee" wireframe />
         </mesh>
       ))}
     </group>
@@ -276,7 +262,6 @@ const WarpStars: React.FC<{ scrollOffset: number }> = ({ scrollOffset }) => {
 
 const NavigationStars: React.FC<{ scrollOffset: number }> = ({ scrollOffset }) => {
   const groupRef = useRef<THREE.Group>(null);
-  const mousePos = useRef({ x: 0, y: 0 });
   
   const { positions, sizes } = useMemo(() => {
     const count = 100;
@@ -294,20 +279,12 @@ const NavigationStars: React.FC<{ scrollOffset: number }> = ({ scrollOffset }) =
   }, []);
 
   useFrame((state) => {
+    const time = state.clock.getElapsedTime();
+    
     if (groupRef.current) {
-      groupRef.current.rotation.x = mousePos.current.y * 0.05;
-      groupRef.current.rotation.y = mousePos.current.x * 0.05;
+      groupRef.current.rotation.z = time * 0.02;
     }
   });
-
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      mousePos.current.x = (e.clientX / window.innerWidth - 0.5) * 2;
-      mousePos.current.y = (e.clientY / window.innerHeight - 0.5) * 2;
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
 
   return (
     <group ref={groupRef}>
