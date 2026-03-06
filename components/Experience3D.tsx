@@ -1,85 +1,82 @@
-import React, { useRef, useState, useEffect, useMemo } from 'react';
+import React, { useRef, useEffect, useMemo } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Text, Float, Trail, Environment } from '@react-three/drei';
 import * as THREE from 'three';
 import { PROJECTS } from '../constants';
 
-const SHAPES = ['sphere', 'knot', 'cube', 'triangle'] as const;
-type ShapeType = typeof SHAPES[number];
-
 const MorphingShape: React.FC<{ scrollOffset: number }> = ({ scrollOffset }) => {
-  const meshRefs = useRef<(THREE.Mesh | null)[]>([]);
-  const [currentShapeIndex, setCurrentShapeIndex] = useState(0);
-  const [targetShapeIndex, setTargetShapeIndex] = useState(0);
-  const transitionProgress = useRef(0);
-  const shapeChangeTimer = useRef<NodeJS.Timeout | null>(null);
+  const groupRef = useRef<THREE.Group>(null);
+  const baseLinesRef = useRef<THREE.LineSegments>(null);
+  const drawLinesRef = useRef<THREE.LineSegments>(null);
+  const lightLineRef = useRef<THREE.Line>(null);
 
-  useEffect(() => {
-    const changeShape = () => {
-      setTargetShapeIndex((prev) => (prev + 1) % SHAPES.length);
-      transitionProgress.current = 0;
-    };
+  const baseGeometry = useMemo(() => {
+    return new THREE.WireframeGeometry(new THREE.IcosahedronGeometry(2, 2));
+  }, []);
 
-    shapeChangeTimer.current = setInterval(changeShape, 4000);
-    return () => {
-      if (shapeChangeTimer.current) clearInterval(shapeChangeTimer.current);
-    };
+  const drawGeometry = useMemo(() => {
+    return new THREE.WireframeGeometry(new THREE.IcosahedronGeometry(2, 2));
   }, []);
 
   useFrame((state) => {
     const t = state.clock.getElapsedTime();
+    const loopDuration = 8;
+    const progress = (t % loopDuration) / loopDuration;
     
-    transitionProgress.current = Math.min(transitionProgress.current + 0.008, 1);
-    const progress = THREE.MathUtils.smoothstep(transitionProgress.current, 0, 1);
-    
-    const prevScale = Math.sin(progress * Math.PI) * 0.3;
-    const currScale = 1 - Math.sin(progress * Math.PI) * 0.3;
-
-    meshRefs.current.forEach((mesh, idx) => {
-      if (!mesh) return;
-      
-      const isPrev = idx === currentShapeIndex;
-      const isCurr = idx === targetShapeIndex;
-      
-      if (isPrev || isCurr) {
-        const scale = isPrev ? (1 - progress) : progress;
-        mesh.scale.setScalar(scale * (1 + Math.sin(t * 2) * 0.05));
-        mesh.visible = scale > 0.01;
-      } else {
-        mesh.visible = false;
-        mesh.scale.setScalar(0);
-      }
-    });
-
-    if (transitionProgress.current >= 1) {
-      setCurrentShapeIndex(targetShapeIndex);
+    if (groupRef.current) {
+      groupRef.current.rotation.y = t * 0.15;
+      groupRef.current.rotation.x = Math.sin(t * 0.3) * 0.2;
+      groupRef.current.rotation.z = Math.cos(t * 0.2) * 0.1;
+      groupRef.current.position.y = Math.sin(t * 0.4) * 0.3;
+      groupRef.current.position.x = Math.cos(t * 0.25) * 0.2;
     }
-
-    if (meshRefs.current[currentShapeIndex]) {
-      meshRefs.current[currentShapeIndex].rotation.y = t * 0.15;
-      meshRefs.current[currentShapeIndex].rotation.z = t * 0.08;
+    
+    if (baseLinesRef.current) {
+      const baseMat = baseLinesRef.current.material as THREE.LineBasicMaterial;
+      baseMat.opacity = 0.3 + Math.sin(progress * Math.PI) * 0.2;
+      baseMat.transparent = true;
+    }
+    
+    if (drawLinesRef.current) {
+      const drawGeo = drawLinesRef.current.geometry as THREE.BufferGeometry;
+      const drawMat = drawLinesRef.current.material as THREE.LineBasicMaterial;
+      
+      const drawProgress = progress;
+      const vertexCount = drawGeo.attributes.position.count;
+      const visibleCount = Math.floor(vertexCount * drawProgress);
+      drawGeo.setDrawRange(0, visibleCount);
+      
+      drawMat.opacity = 1;
+      drawMat.transparent = true;
+    }
+    
+    if (lightLineRef.current) {
+      const lightGeo = lightLineRef.current.geometry as THREE.BufferGeometry;
+      const lightMat = lightLineRef.current.material as THREE.LineBasicMaterial;
+      
+      const lightProgress = progress;
+      const vertexCount = lightGeo.attributes.position.count;
+      const lightIndex = Math.floor(vertexCount * lightProgress);
+      lightGeo.setDrawRange(0, lightIndex + 1);
+      
+      lightMat.opacity = 1;
+      lightMat.transparent = true;
     }
   });
 
-  const geometries = useMemo(() => [
-    new THREE.SphereGeometry(1.8, 64, 64),
-    new THREE.TorusKnotGeometry(1.2, 0.4, 128, 32),
-    new THREE.BoxGeometry(2.8, 2.8, 2.8, 32, 32, 32),
-    new THREE.IcosahedronGeometry(2, 1),
-  ], []);
-
   return (
-    <group>
-      {SHAPES.map((shape, idx) => (
-        <mesh
-          key={shape}
-          ref={(el) => { meshRefs.current[idx] = el; }}
-          geometry={geometries[idx]}
-          visible={idx === 0}
-        >
-          <meshBasicMaterial color="#22d3ee" wireframe />
-        </mesh>
-      ))}
+    <group ref={groupRef}>
+      <lineSegments ref={baseLinesRef} geometry={baseGeometry}>
+        <lineBasicMaterial color="#22d3ee" transparent opacity={0.4} />
+      </lineSegments>
+      
+      <lineSegments ref={drawLinesRef} geometry={drawGeometry}>
+        <lineBasicMaterial color="#22d3ee" transparent opacity={1} />
+      </lineSegments>
+      
+      <line ref={lightLineRef} geometry={baseGeometry}>
+        <lineBasicMaterial color="#ffffff" transparent opacity={1} />
+      </line>
     </group>
   );
 };
