@@ -73,3 +73,12 @@ export const PHILOSOPHY_AXIOMS = [
     content: 'The loudest message is the one not sent. We engineer the pause, the breath, the gap in the code.'
   }
 ];
+
+export const EXTERNAL_LINKS = {
+  inkglass: {
+    name: 'InkGlass AI',
+    description: 'Modern AI application with glassmorphism and e-ink aesthetic - no AI APIs required',
+    github: 'https://github.com/destroyallsecrets/inkglass-ai',
+    vercel: 'https://inkglass-ai.vercel.app'
+  }
+};

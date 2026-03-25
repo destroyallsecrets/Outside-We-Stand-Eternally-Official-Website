@@ -1,8 +1,9 @@
 import React from 'react';
 import { SwissGrid } from '../components/SwissGrid';
 import { ProjectList } from '../components/ProjectList';
-import { ArrowDown } from 'lucide-react';
+import { ArrowDown, ExternalLink, Github } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { EXTERNAL_LINKS } from '../constants';
 
 export const Home: React.FC = () => {
   return (
@@ -32,6 +33,54 @@ export const Home: React.FC = () => {
         </div>
         {/* Decorative glowing orb behind text - Changed to Red/Dark */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-red-900/10 blur-[120px] rounded-full pointer-events-none" />
+      </section>
+
+      {/* External Projects Section */}
+      <section className="py-24 px-6 relative z-10 bg-slate-950/40">
+        <div className="max-w-7xl mx-auto">
+          <div className="mb-12 text-center">
+            <h2 className="text-3xl md:text-4xl font-thin tracking-tight text-white mb-4">
+              FEATURED PROJECT
+            </h2>
+            <p className="text-red-400 text-sm uppercase tracking-widest">From the deep</p>
+          </div>
+          
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="max-w-3xl mx-auto border border-white/20 bg-slate-900/60 backdrop-blur-xl rounded-2xl p-8 md:p-12"
+          >
+            <h3 className="text-3xl md:text-4xl font-bold text-white mb-3">
+              {EXTERNAL_LINKS.inkglass.name}
+            </h3>
+            <p className="text-slate-300 mb-8 leading-relaxed">
+              {EXTERNAL_LINKS.inkglass.description}
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-4">
+              <a
+                href={EXTERNAL_LINKS.inkglass.vercel}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-3 px-6 py-4 bg-red-500 hover:bg-red-600 text-black font-bold uppercase tracking-widest transition-colors rounded-lg"
+              >
+                <ExternalLink className="w-5 h-5" />
+                Live Demo
+              </a>
+              <a
+                href={EXTERNAL_LINKS.inkglass.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-3 px-6 py-4 border border-white/30 hover:border-white/60 hover:bg-white/5 text-white font-bold uppercase tracking-widest transition-colors rounded-lg"
+              >
+                <Github className="w-5 h-5" />
+                Source Code
+              </a>
+            </div>
+          </motion.div>
+        </div>
       </section>
 
       {/* Projects Section */}
