@@ -77,7 +77,7 @@ export const PHILOSOPHY_AXIOMS = [
 export const EXTERNAL_LINKS = {
   inkglass: {
     name: 'InkGlass AI',
-    description: 'Modern AI application with glassmorphism and e-ink aesthetic - no AI APIs required',
+    description: 'AI app with glassmorphism/e-ink aesthetic, featuring Markdown editor, improved error handling, loading skeletons, accessibility enhancements, and keyboard shortcuts',
     github: 'https://github.com/destroyallsecrets/inkglass-ai',
     vercel: 'https://inkglass-ai.vercel.app'
   }
