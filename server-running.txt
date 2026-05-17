@@ -1,0 +1,13 @@
+OWSE E-Commerce Suite is running!
+
+URL: http://localhost:3000
+
+If the page is blank, try:
+1. Press F12 in browser to open DevTools
+2. Check the Console tab for errors
+3. Check the Network tab to see if files load
+
+If you see "Could not find module" or import errors, that's likely the issue.
+
+To manually open in browser, copy this URL:
+http://localhost:3000

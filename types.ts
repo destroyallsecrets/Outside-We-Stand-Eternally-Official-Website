@@ -42,6 +42,23 @@ export interface BrandPillar {
   businessAngle: string;
 }
 
+export interface PhilosophyAxiom {
+  roman: string;
+  title: string;
+  tagline: string;
+  content: string;
+  businessValue: string;
+  icon: string;
+}
+
+export interface BrandPillar {
+  id: string;
+  title: string;
+  tagline: string;
+  description: string;
+  businessAngle: string;
+}
+
 export interface ChatMessage {
   role: 'user' | 'model';
   text: string;
