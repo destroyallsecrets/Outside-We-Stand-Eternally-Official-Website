@@ -1,3 +1,5 @@
+export type ProjectStatus = 'live' | 'deprecated' | 'archived' | 'building';
+
 export interface Project {
   id: string;
   title: string;
@@ -5,6 +7,39 @@ export interface Project {
   description: string;
   year: string;
   color: string;
+  status?: ProjectStatus;
+  techStack?: string[];
+  repoUrl?: string;
+  demoUrl?: string;
+  docsUrl?: string;
+  lastUpdated?: string;
+  stars?: number;
+  views?: number;
+  dependencies?: Record<string, string>;
+}
+
+export interface ProjectFilter {
+  search?: string;
+  tech?: string[];
+  year?: string;
+  status?: ProjectStatus;
+}
+
+export interface PhilosophyAxiom {
+  roman: string;
+  title: string;
+  tagline: string;
+  content: string;
+  businessValue: string;
+  icon: string;
+}
+
+export interface BrandPillar {
+  id: string;
+  title: string;
+  tagline: string;
+  description: string;
+  businessAngle: string;
 }
 
 export interface ChatMessage {

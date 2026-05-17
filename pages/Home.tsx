@@ -1,7 +1,7 @@
 import React from 'react';
 import { SwissGrid } from '../components/SwissGrid';
 import { ProjectList } from '../components/ProjectList';
-import { ArrowDown, ExternalLink, Github } from 'lucide-react';
+import { ExternalLink, Github } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { EXTERNAL_LINKS } from '../constants';
 
@@ -11,12 +11,6 @@ export const Home: React.FC = () => {
       {/* Hero Section */}
       <section className="min-h-screen relative">
         <SwissGrid />
-        
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-4 animate-bounce opacity-50">
-          <span className="text-[10px] tracking-[0.3em] uppercase">Enter The Void</span>
-          <ArrowDown className="w-4 h-4" />
-        </div>
       </section>
 
       {/* Narrative / Philosophy Bridge */}
@@ -31,8 +25,8 @@ export const Home: React.FC = () => {
             "We do not hide in the shadows. We are the shadows."
           </motion.h2>
         </div>
-        {/* Decorative glowing orb behind text - Changed to Red/Dark */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-red-900/10 blur-[120px] rounded-full pointer-events-none" />
+        {/* Decorative glowing orb behind text - Scaled down */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-red-900/10 blur-[80px] rounded-full pointer-events-none" />
       </section>
 
       {/* External Projects Section */}

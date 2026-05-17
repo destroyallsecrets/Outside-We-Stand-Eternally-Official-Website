@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "vite": "^8.0.10"
+  },
+  "_npx": {
+    "packages": [
+      "vite"
+    ]
+  }
+}

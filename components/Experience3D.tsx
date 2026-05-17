@@ -20,15 +20,15 @@ const MorphingShape: React.FC<{ scrollOffset: number }> = ({ scrollOffset }) => 
 
   useFrame((state) => {
     const t = state.clock.getElapsedTime();
-    const loopDuration = 8;
+    const loopDuration = 12;
     const progress = (t % loopDuration) / loopDuration;
     
     if (groupRef.current) {
-      groupRef.current.rotation.y = t * 0.15;
-      groupRef.current.rotation.x = Math.sin(t * 0.3) * 0.2;
-      groupRef.current.rotation.z = Math.cos(t * 0.2) * 0.1;
-      groupRef.current.position.y = Math.sin(t * 0.4) * 0.3;
-      groupRef.current.position.x = Math.cos(t * 0.25) * 0.2;
+      groupRef.current.rotation.y = t * 0.08;
+      groupRef.current.rotation.x = Math.sin(t * 0.15) * 0.1;
+      groupRef.current.rotation.z = Math.cos(t * 0.1) * 0.05;
+      groupRef.current.position.y = Math.sin(t * 0.2) * 0.15;
+      groupRef.current.position.x = Math.cos(t * 0.12) * 0.1;
     }
     
     if (baseLinesRef.current) {
@@ -67,11 +67,11 @@ const MorphingShape: React.FC<{ scrollOffset: number }> = ({ scrollOffset }) => 
   return (
     <group ref={groupRef}>
       <lineSegments ref={baseLinesRef} geometry={baseGeometry}>
-        <lineBasicMaterial color="#22d3ee" transparent opacity={0.4} />
+        <lineBasicMaterial color="#22d3ee" transparent opacity={0.2} />
       </lineSegments>
       
       <lineSegments ref={drawLinesRef} geometry={drawGeometry}>
-        <lineBasicMaterial color="#22d3ee" transparent opacity={1} />
+        <lineBasicMaterial color="#22d3ee" transparent opacity={0.5} />
       </lineSegments>
       
       <line ref={lightLineRef} geometry={baseGeometry}>
@@ -172,7 +172,7 @@ const StarField: React.FC<{ scrollOffset: number }> = ({ scrollOffset }) => {
             itemSize={3}
           />
         </bufferGeometry>
-        <lineBasicMaterial color="#22d3ee" transparent opacity={0.15} />
+        <lineBasicMaterial color="#22d3ee" transparent opacity={0.08} />
       </lineSegments>
       
       <points ref={pointsRef}>
@@ -191,10 +191,10 @@ const StarField: React.FC<{ scrollOffset: number }> = ({ scrollOffset }) => {
           />
         </bufferGeometry>
         <pointsMaterial
-          size={0.4}
+          size={0.3}
           vertexColors
           transparent
-          opacity={0.9}
+          opacity={0.5}
           sizeAttenuation
         />
       </points>
@@ -206,7 +206,7 @@ const WarpStars: React.FC<{ scrollOffset: number }> = ({ scrollOffset }) => {
   const starsRef = useRef<THREE.Points>(null);
   
   const { positions } = useMemo(() => {
-    const count = 3000;
+    const count = 1500;
     const positions = new Float32Array(count * 3);
     
     for (let i = 0; i < count; i++) {
@@ -222,7 +222,7 @@ const WarpStars: React.FC<{ scrollOffset: number }> = ({ scrollOffset }) => {
     if (starsRef.current) {
       const time = state.clock.getElapsedTime();
       const posArray = starsRef.current.geometry.attributes.position.array as Float32Array;
-      const velocity = 0.05 + Math.abs(scrollOffset) * 3;
+      const velocity = 0.02 + Math.abs(scrollOffset) * 1.5;
       
       for (let i = 0; i < posArray.length / 3; i++) {
         posArray[i * 3 + 2] += velocity;
@@ -246,13 +246,13 @@ const WarpStars: React.FC<{ scrollOffset: number }> = ({ scrollOffset }) => {
           itemSize={3}
         />
       </bufferGeometry>
-      <pointsMaterial
-        size={0.04}
-        color="#ffffff"
-        transparent
-        opacity={0.5}
-        sizeAttenuation
-      />
+<pointsMaterial
+          size={0.03}
+          color="#ffffff"
+          transparent
+          opacity={0.3}
+          sizeAttenuation
+        />
     </points>
   );
 };
@@ -261,7 +261,7 @@ const NavigationStars: React.FC<{ scrollOffset: number }> = ({ scrollOffset }) =
   const groupRef = useRef<THREE.Group>(null);
   
   const { positions, sizes } = useMemo(() => {
-    const count = 100;
+    const count = 50;
     const positions = new Float32Array(count * 3);
     const sizes = new Float32Array(count);
     
@@ -269,7 +269,7 @@ const NavigationStars: React.FC<{ scrollOffset: number }> = ({ scrollOffset }) =
       positions[i * 3] = (Math.random() - 0.5) * 40;
       positions[i * 3 + 1] = (Math.random() - 0.5) * 40;
       positions[i * 3 + 2] = -20 - Math.random() * 30;
-      sizes[i] = 0.02 + Math.random() * 0.08;
+      sizes[i] = 0.02 + Math.random() * 0.05;
     }
     
     return { positions, sizes };
@@ -279,7 +279,7 @@ const NavigationStars: React.FC<{ scrollOffset: number }> = ({ scrollOffset }) =
     const time = state.clock.getElapsedTime();
     
     if (groupRef.current) {
-      groupRef.current.rotation.z = time * 0.02;
+      groupRef.current.rotation.z = time * 0.01;
     }
   });
 
@@ -295,10 +295,10 @@ const NavigationStars: React.FC<{ scrollOffset: number }> = ({ scrollOffset }) =
           />
         </bufferGeometry>
         <pointsMaterial
-          size={0.1}
+          size={0.08}
           color="#67e8f9"
           transparent
-          opacity={0.7}
+          opacity={0.4}
           sizeAttenuation
         />
       </points>
